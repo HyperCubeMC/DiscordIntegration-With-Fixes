@@ -46,6 +46,10 @@ public final class DiscordIntegrationForge {
         if (ModList.get().getModContainerById("dynmap").isPresent()) {
             new DynmapListener().register();
         }
+        if (ModList.get().getModContainerById("vmod").isPresent()) {
+            NeoForge.EVENT_BUS.register(new VanishEventListener());
+        }
+
     }
     @SubscribeEvent
     public void serverStarted(final ServerStartedEvent ev) {
@@ -76,4 +80,5 @@ public final class DiscordIntegrationForge {
         }
         ev.addNodes(nodes.values().toArray(new PermissionNode[0]));
     }
+
 }

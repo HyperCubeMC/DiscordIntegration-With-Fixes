@@ -28,6 +28,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -182,6 +183,64 @@ public final class DiscordIntegrationMod {
     private static final Pattern mentionPattern = Pattern.compile("@([a-z0-9_.]{2,32})");
     private static final Pattern legacyMentionPattern = Pattern.compile("@(.{3,32}#[0-9]{4})");
 
+    /**
+     * Sends leave / join messages on vanish / unvanish
+     */
+    public static void vanish(ServerPlayer player, boolean vanished) {
+        if(vanished){
+            if (LinkManager.isPlayerLinked(player.getUUID()) && LinkManager.getLink(null, player.getUUID()).settings.hideFromDiscord) {
+                return;
+            }
+            final String avatarURL = INSTANCE.getSkinURL().replace("%uuid%", player.getUUID().toString()).replace("%uuid_dashless%", player.getUUID().toString().replace("-", "")).replace("%name%", player.getName().getString()).replace("%randomUUID%", UUID.randomUUID().toString());
+            if (INSTANCE != null && !DiscordIntegrationMod.timeouts.contains(player.getUUID())) {
+                if (!Localization.instance().playerLeave.isBlank()) {
+                    if (Configuration.instance().embedMode.enabled && Configuration.instance().embedMode.playerLeaveMessages.asEmbed) {
+                        if (!Configuration.instance().embedMode.playerLeaveMessages.customJSON.isBlank()) {
+                            final EmbedBuilder b = Configuration.instance().embedMode.playerLeaveMessages.toEmbedJson(Configuration.instance().embedMode.playerLeaveMessages.customJSON
+                                    .replace("%uuid%", player.getUUID().toString())
+                                    .replace("%uuid_dashless%", player.getUUID().toString().replace("-", ""))
+                                    .replace("%name%", MessageUtilsImpl.formatPlayerName(player))
+                                    .replace("%randomUUID%", UUID.randomUUID().toString())
+                                    .replace("%avatarURL%", avatarURL)
+                                    .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUUID()).getRGB())
+                            );
+                            INSTANCE.sendMessage(new DiscordMessage(b.build()),INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
+                        } else {
+                            final EmbedBuilder b = Configuration.instance().embedMode.playerLeaveMessages.toEmbed().setAuthor(MessageUtilsImpl.formatPlayerName(player), null, avatarURL)
+                                    .setDescription(Localization.instance().playerLeave.replace("%player%", MessageUtilsImpl.formatPlayerName(player)));
+                            INSTANCE.sendMessage(new DiscordMessage(b.build()),INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
+                        }
+                    } else
+                        INSTANCE.sendMessage(Localization.instance().playerLeave.replace("%player%", MessageUtilsImpl.formatPlayerName(player)),INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
+                }
+            }
+        }else{
+            if (LinkManager.isPlayerLinked(player.getUUID()) && LinkManager.getLink(null, player.getUUID()).settings.hideFromDiscord)
+                return;
+            if (!Localization.instance().playerJoin.isBlank()) {
+                if (Configuration.instance().embedMode.enabled && Configuration.instance().embedMode.playerJoinMessage.asEmbed) {
+                    final String avatarURL = INSTANCE.getSkinURL().replace("%uuid%", player.getUUID().toString()).replace("%uuid_dashless%", player.getUUID().toString().replace("-", "")).replace("%name%", player.getName().getString()).replace("%randomUUID%", UUID.randomUUID().toString());
+                    if (!Configuration.instance().embedMode.playerJoinMessage.customJSON.isBlank()) {
+                        final EmbedBuilder b = Configuration.instance().embedMode.playerJoinMessage.toEmbedJson(Configuration.instance().embedMode.playerJoinMessage.customJSON
+                                .replace("%uuid%", player.getUUID().toString())
+                                .replace("%uuid_dashless%", player.getUUID().toString().replace("-", ""))
+                                .replace("%name%", MessageUtilsImpl.formatPlayerName(player))
+                                .replace("%randomUUID%", UUID.randomUUID().toString())
+                                .replace("%avatarURL%", avatarURL)
+                                .replace("%playerColor%", "" + TextColors.generateFromUUID(player.getUUID()).getRGB())
+                        );
+                        INSTANCE.sendMessage(new DiscordMessage(b.build()));
+                    } else {
+                        final EmbedBuilder b = Configuration.instance().embedMode.playerJoinMessage.toEmbed();
+                        b.setAuthor(MessageUtilsImpl.formatPlayerName(player), null, avatarURL)
+                                .setDescription(Localization.instance().playerJoin.replace("%player%", MessageUtilsImpl.formatPlayerName(player)));
+                        INSTANCE.sendMessage(new DiscordMessage(b.build()), INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
+                    }
+                } else
+                    INSTANCE.sendMessage(Localization.instance().playerJoin.replace("%player%", MessageUtilsImpl.formatPlayerName(player)), INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
+            }
+        }
+    }
 
     public static PlayerChatMessage handleChatMessage(PlayerChatMessage message, ServerPlayer player) {
         if (DiscordIntegration.INSTANCE == null) return message;
