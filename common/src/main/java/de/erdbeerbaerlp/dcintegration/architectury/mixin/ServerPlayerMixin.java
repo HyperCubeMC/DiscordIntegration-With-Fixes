@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,6 +30,8 @@ public class ServerPlayerMixin {
         ServerPlayer p = (ServerPlayer) (Object) this;
 
         if (DiscordIntegration.INSTANCE != null) {
+
+            if(INSTANCE.getServerInterface().isPlayerVanish(p.getUUID())) return;
             if (LinkManager.isPlayerLinked(p.getUUID()) && LinkManager.getLink(null, p.getUUID()).settings.hideFromDiscord)
                 return;
             final Component deathMessage = s.getLocalizedDeathMessage(p);

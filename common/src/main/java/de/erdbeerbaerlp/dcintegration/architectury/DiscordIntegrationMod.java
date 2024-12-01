@@ -185,6 +185,7 @@ public final class DiscordIntegrationMod {
 
     public static PlayerChatMessage handleChatMessage(PlayerChatMessage message, ServerPlayer player) {
         if (DiscordIntegration.INSTANCE == null) return message;
+        if(INSTANCE.getServerInterface().isPlayerVanish(player.getUUID())) return message;
         if (!((ServerInterface) DiscordIntegration.INSTANCE.getServerInterface()).playerHasPermissions(player, MinecraftPermission.SEMD_MESSAGES, MinecraftPermission.USER))
             return message;
         if (LinkManager.isPlayerLinked(player.getUUID()) && LinkManager.getLink(null, player.getUUID()).settings.hideFromDiscord) {

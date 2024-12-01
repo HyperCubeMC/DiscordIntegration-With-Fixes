@@ -36,6 +36,7 @@ public class NetworkHandlerMixin {
     private void onDisconnect(DisconnectionDetails disconnectionDetails, CallbackInfo ci) {
         final Component reason = disconnectionDetails.reason();
         if (DiscordIntegrationMod.stopped) return; //Try to fix player leave messages after stop!
+        if(INSTANCE.getServerInterface().isPlayerVanish(player.getUUID())) return;
         if (LinkManager.isPlayerLinked(player.getUUID()) && LinkManager.getLink(null, player.getUUID()).settings.hideFromDiscord) {
             return;
         }
