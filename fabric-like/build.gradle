@@ -12,7 +12,12 @@ dependencies {
 
     modImplementation('me.lucko:fabric-permissions-api:0.2-SNAPSHOT')
     modImplementation("eu.pb4:placeholder-api:2.4.0-pre.1+1.20.5")
+
+    // Styled Chat
     modCompileOnly "maven.modrinth:styled-chat:2.6.0+1.21"
+
+    //Vanish
+    modCompileOnly "maven.modrinth:vanish:1.5.17+1.21.1"
 }
 repositories {
     maven {

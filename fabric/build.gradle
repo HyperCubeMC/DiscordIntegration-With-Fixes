@@ -81,6 +81,10 @@ modrinth{
         loaders = ['fabric']
         dependencies {
             required.project "fabric-api"
+            optional.project "vanish"
+            optional.project "dynmap"
+            optional.project "luckperms"
+            optional.project "styled-chat"
         }
         versionType = project.releaseType.toUpperCase()
     }
@@ -98,6 +102,9 @@ curseforge {
             }
             relations {
                 requiredDependency("fabric-api")
+                optionalDependency("dynmapforge")
+                optionalDependency("luckperms")
+                optionalDependency("styled-chat")
             }
         }
     }

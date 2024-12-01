@@ -199,6 +199,14 @@ public class ServerInterface implements McServerInterface {
         }
     }
 
+    @Override
+    public boolean isPlayerVanish(UUID player) {
+        return checkVanish(player);
+    }
+    @ExpectPlatform
+    private static boolean checkVanish(UUID player) {
+        throw new AssertionError();
+    }
     @ExpectPlatform
     private static boolean playerHasPermissionsX(Player player, String... permissions) {
         throw new AssertionError();
@@ -223,6 +231,8 @@ public class ServerInterface implements McServerInterface {
     private static String getLoaderNameX() {
         throw new AssertionError();
     }
+
+
 
     @ExpectPlatform
     public static String getLoaderVersion() {
