@@ -60,11 +60,15 @@ public final class DiscordIntegrationMod {
         }
     }
 
+    public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
+        new McCommandDiscord(dispatcher);
+    }
+
     public static void serverStarting(MinecraftServer minecraftServer) {
         server = minecraftServer;
         DiscordIntegration.INSTANCE = new DiscordIntegration(new ServerInterface());
         try {
-            //Wait a short time to allow JDA to get initiaized
+            //Wait a short time to allow JDA to get initialized
             DiscordIntegration.LOGGER.info("Waiting for JDA to initialize to send starting message... (max 5 seconds before skipping)");
             for (int i = 0; i <= 5; i++) {
                 if (DiscordIntegration.INSTANCE.getJDA() == null) Thread.sleep(1000);
@@ -89,7 +93,6 @@ public final class DiscordIntegrationMod {
             }
         } catch (InterruptedException | NullPointerException ignored) {
         }
-        new McCommandDiscord(minecraftServer.getCommands().getDispatcher());
     }
 
     public static void serverStarted(MinecraftServer minecraftServer) {

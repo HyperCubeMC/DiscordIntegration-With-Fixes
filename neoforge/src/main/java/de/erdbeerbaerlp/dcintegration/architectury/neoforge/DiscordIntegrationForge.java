@@ -11,6 +11,7 @@ import net.neoforged.fml.common.Mod;
 import de.erdbeerbaerlp.dcintegration.architectury.DiscordIntegrationMod;
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -37,6 +38,7 @@ public final class DiscordIntegrationForge {
     public void serverSetup(FMLDedicatedServerSetupEvent ev) {
 
     }
+
     @SubscribeEvent
     public void serverStarting(final ServerStartingEvent ev) {
         DiscordIntegrationMod.serverStarting(ev.getServer());
@@ -50,6 +52,12 @@ public final class DiscordIntegrationForge {
         DiscordIntegrationMod.serverStarted(ev.getServer());
 
     }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        DiscordIntegrationMod.registerCommands(event.getDispatcher());
+    }
+
     @SubscribeEvent
     public void serverStopping(final ServerStoppingEvent ev) {
         DiscordIntegrationMod.serverStopping(ev.getServer());
