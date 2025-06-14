@@ -56,7 +56,7 @@ public class ServerPlayerMixin {
                         DiscordIntegration.INSTANCE.sendMessage(new DiscordMessage(b.build()),INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
                     }else {
                         final EmbedBuilder b = Configuration.instance().embedMode.deathMessage.toEmbed();
-                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%player%", MessageUtilsImpl.formatPlayerName(p)).replace("%msg%", ChatFormatting.stripFormatting(deathMessage.getString()).replace(MessageUtilsImpl.formatPlayerName(p) + " ", "")));
+                        b.setDescription(":skull: " + Localization.instance().playerDeath.replace("%msg%", ChatFormatting.stripFormatting(deathMessage.getString())));
                         if (embed != null) {
                             b.addBlankField(false);
                             b.addField(embed.getTitle() + " *(" + embed.getFooter().getText() + ")*", embed.getDescription(), false);
@@ -64,7 +64,7 @@ public class ServerPlayerMixin {
                         DiscordIntegration.INSTANCE.sendMessage(new DiscordMessage(b.build()), DiscordIntegration.INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
                     }
                 } else
-                    DiscordIntegration.INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%player%", MessageUtilsImpl.formatPlayerName(p)).replace("%msg%",  ChatFormatting.stripFormatting(deathMessage.getString()).replace(MessageUtilsImpl.formatPlayerName(p) + " ", ""))), DiscordIntegration.INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
+                    DiscordIntegration.INSTANCE.sendMessage(new DiscordMessage(embed, Localization.instance().playerDeath.replace("%msg%", ChatFormatting.stripFormatting(deathMessage.getString()))), DiscordIntegration.INSTANCE.getChannel(Configuration.instance().advanced.deathsChannelID));
         }
     }
 }

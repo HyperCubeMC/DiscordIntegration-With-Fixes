@@ -30,10 +30,7 @@ import net.minecraft.world.level.Level;
 
 public class MessageUtilsImpl extends MessageUtils {
     public static String formatPlayerName(ServerPlayer player) {
-        if (player.getTabListDisplayName() != null)
-            return ChatFormatting.stripFormatting(player.getTabListDisplayName().getString());
-        else
-            return ChatFormatting.stripFormatting(player.getName().getString());
+        return player.getDisplayName().getString();
     }
 
     public static MessageEmbed genItemStackEmbedIfAvailable(final Component component, Level w) {
@@ -41,8 +38,7 @@ public class MessageUtilsImpl extends MessageUtils {
         JsonObject json;
         try {
             final JsonElement jsonElement = JsonParser.parseString(Component.Serializer.toJson(component, w.registryAccess()));
-
-            DiscordIntegration.LOGGER.info("JSON-Element: "+jsonElement);
+            
             if (jsonElement.isJsonObject())
                 json = jsonElement.getAsJsonObject();
             else return null;
