@@ -16,6 +16,9 @@ dependencies {
     // Styled Chat
     modCompileOnly "maven.modrinth:styled-chat:2.6.0+1.21"
 
+    //Dynmap-API
+    modCompileOnly('com.github.webbukkit:DynmapCoreAPI:2.5')
+
     //Vanish
     modCompileOnly "maven.modrinth:vanish:1.5.17+1.21.1"
 }
@@ -28,4 +31,6 @@ repositories {
         }
     }
     maven { url "https://maven.nucleoid.xyz/" }
+
+    maven { url 'https://jitpack.io' }
 }

@@ -49,8 +49,11 @@ dependencies {
     forgeRuntimeLibrary("de.erdbeerbaerlp:dcintegration.common:$rootProject.core_version")
     shadowBundle("de.erdbeerbaerlp:dcintegration.common:$rootProject.core_version")
 
+    //Dynmap-API
+    modCompileOnly('com.github.webbukkit:DynmapCoreAPI:2.5')
+
     //Vanishmod
-    modCompileOnly('maven.modrinth:vanishmod:1.21.1-v1.1.18')
+    modCompileOnly('maven.modrinth:vanishmod:KJkKADGN')
 }
 
 processResources {
