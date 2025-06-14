@@ -74,7 +74,8 @@ public class NetworkHandlerMixin {
                 } else
                     DiscordIntegration.INSTANCE.sendMessage(Localization.instance().playerTimeout.replace("%player%", MessageUtilsImpl.formatPlayerName(player)),INSTANCE.getChannel(Configuration.instance().advanced.serverChannelID));
             }
-            DiscordIntegrationMod.timeouts.remove(player.getUUID());
+            // Fix for buggy timeouts causing leftovers in the timeout list - carried over from old 1.19 fork, unknown if still needed
+            DiscordIntegrationMod.timeouts.removeIf(uuid -> uuid.equals(player.getUUID()));
         }
     }
 }
