@@ -1,5 +1,6 @@
 package de.erdbeerbaerlp.dcintegration.architectury;
 
+import com.mojang.brigadier.CommandDispatcher;
 import dcshadow.net.kyori.adventure.text.Component;
 import dcshadow.net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import de.erdbeerbaerlp.dcintegration.architectury.api.ArchitecturyDiscordEventHandler;
@@ -22,6 +23,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.MinecraftServer;
@@ -69,7 +71,8 @@ public final class DiscordIntegrationMod {
                 else break;
             }
             if (DiscordIntegration.INSTANCE.getJDA() != null) {
-                Thread.sleep(2000); //Wait for it to cache the channels
+                // Wait for JDA to cache channels
+                INSTANCE.getJDA().awaitReady();
                 CommandRegistry.registerDefaultCommands();
                 if (!Localization.instance().serverStarting.isEmpty()) {
 
